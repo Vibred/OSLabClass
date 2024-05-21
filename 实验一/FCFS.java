@@ -34,7 +34,7 @@ class FCFS extends Scheduler {
             current.state = 'F'; // F表示完成状态
         }
         printFinalStatus();
-        System.out.println("先来先服务调度总用时：" + totalTime + " 个时间单位");
+        System.out.println("先来先服务调度总用时：" + totalTime + " 个时间单位。");
     }
 
     @Override

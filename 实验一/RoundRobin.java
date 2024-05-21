@@ -45,7 +45,7 @@ class RoundRobin extends Scheduler {
             }
         }
         printFinalStatus();
-        System.out.println("轮转调度总用时：" + totalTime + " 个时间单位");
+        System.out.println("轮转调度总用时：" + totalTime + " 个时间单位。");
     }
 
     @Override

@@ -36,7 +36,7 @@ class ShortestJobFirst extends Scheduler {
             processList.remove(0);
         }
         printFinalStatus();
-        System.out.println("最短作业优先调度总用时：" + totalTime + " 个时间单位");
+        System.out.println("最短作业优先调度总用时：" + totalTime + " 个时间单位。");
     }
 
     @Override
