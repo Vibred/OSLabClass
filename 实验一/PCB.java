@@ -1,5 +1,3 @@
-// PCB.java
-
 package OSLabClass.实验一;
 
 class PCB {
