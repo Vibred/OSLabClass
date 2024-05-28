@@ -28,9 +28,26 @@ abstract class Scheduler {
     protected void printFinalStatus() {
         System.out.println("\n最终结果：");
         for (PCB pcb : allProcesses) {
-            System.out.print("进程名：" + pcb.name +";"+"\t");
-            System.out.println("首次运行时刻："+ (pcb.startTime) +";" + "\t从就绪到结束用时 " + (pcb.endTime) + " 个时间单位" +";");
+            System.out.print("进程名：" + pcb.name + ";");
+            System.out.println("首次运行时刻：" + (pcb.startTime) + "; " + "\t从就绪到结束用时 " + (pcb.endTime - pcb.arrivalTime) + " 个时间单位;");
         }
+    }
+
+    public List<Integer> calculateMetrics() {
+        int totalTurnaroundTime = 0;
+        int totalWaitingTime = 0;
+        for (PCB pcb : allProcesses) {
+            int turnaroundTime = pcb.endTime - pcb.arrivalTime;
+            int waitingTime = turnaroundTime - pcb.needTime;
+            totalTurnaroundTime += turnaroundTime;
+            totalWaitingTime += waitingTime;
+        }
+        int n = allProcesses.size();
+        List<Integer> metrics = new ArrayList<>();
+        metrics.add(totalTime);
+        metrics.add(totalTurnaroundTime / n);
+        metrics.add(totalWaitingTime / n);
+        return metrics;
     }
 
     protected abstract Queue<PCB> getProcessQueue();

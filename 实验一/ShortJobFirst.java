@@ -21,6 +21,9 @@ class ShortestJobFirst extends Scheduler {
         processList.sort(Comparator.comparingInt(pcb -> pcb.needTime)); // 按需求时间排序
         while (!processList.isEmpty()) {
             PCB current = processList.get(0);
+            if (current.arrivalTime > currentTime) {
+                currentTime = current.arrivalTime;
+            }
             current.state = 'R'; // R表示运行状态
             current.startTime = currentTime;
             for (int t = 0; t < current.needTime; t++) {

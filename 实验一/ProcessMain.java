@@ -8,6 +8,25 @@ import java.util.*;
 public class ProcessMain {
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("请选择功能：");
+        System.out.println("1. 执行processes.txt文件中的进程调度并输出结果");
+        System.out.println("2. 执行100次随机生成50个进程并比较调度算法优劣");
+        int choice = scanner.nextInt();
+
+        switch (choice) {
+            case 1:
+                executeProcessesFromFile();
+                break;
+            case 2:
+                compareAlgorithmsWithRandomProcesses();
+                break;
+            default:
+                System.out.println("无效选择");
+        }
+    }
+
+    private static void executeProcessesFromFile() {
         RoundRobin rr = new RoundRobin(4); // 时间片为4
         ShortestJobFirst sjf = new ShortestJobFirst();
         FCFS fcfs = new FCFS();
@@ -20,11 +39,11 @@ public class ProcessMain {
                 String[] parts = line.split("\\s+");
                 String name = parts[0];
                 int needTime = Integer.parseInt(parts[1]);
-                PCB pcb = new PCB(name, needTime);
+                PCB pcb = new PCB(name, needTime, 0);
                 processes.add(pcb);
-                rr.addProcess(new PCB(name, needTime)); // 创建新的PCB对象传递给每个调度器，防止状态共享
-                sjf.addProcess(new PCB(name, needTime));
-                fcfs.addProcess(new PCB(name, needTime));
+                rr.addProcess(new PCB(name, needTime, 0)); // 创建新的PCB对象传递给每个调度器，防止状态共享
+                sjf.addProcess(new PCB(name, needTime, 0));
+                fcfs.addProcess(new PCB(name, needTime, 0));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,5 +63,61 @@ public class ProcessMain {
 
         System.out.println("\n先来先服务调度：");
         fcfs.schedule();
+    }
+
+    private static void compareAlgorithmsWithRandomProcesses() {
+        int numberOfRuns = 100;
+        int numberOfProcesses = 50;
+        Random random = new Random();
+        List<List<Integer>> rrResults = new ArrayList<>();
+        List<List<Integer>> sjfResults = new ArrayList<>();
+        List<List<Integer>> fcfsResults = new ArrayList<>();
+
+        for (int i = 0; i < numberOfRuns; i++) {
+            RoundRobin rr = new RoundRobin(4); // 时间片为4
+            ShortestJobFirst sjf = new ShortestJobFirst();
+            FCFS fcfs = new FCFS();
+
+            for (int j = 0; j < numberOfProcesses; j++) {
+                String name = "P" + j;
+                int needTime = random.nextInt(10) + 1;
+                int arrivalTime = random.nextInt(100);
+                PCB pcb = new PCB(name, needTime, arrivalTime);
+                rr.addProcess(new PCB(name, needTime, arrivalTime));
+                sjf.addProcess(new PCB(name, needTime, arrivalTime));
+                fcfs.addProcess(new PCB(name, needTime, arrivalTime));
+            }
+
+            rr.schedule();
+            sjf.schedule();
+            fcfs.schedule();
+
+            rrResults.add(rr.calculateMetrics());
+            sjfResults.add(sjf.calculateMetrics());
+            fcfsResults.add(fcfs.calculateMetrics());
+        }
+
+        printAverageResults(rrResults, "轮转调度");
+        printAverageResults(sjfResults, "最短作业优先调度");
+        printAverageResults(fcfsResults, "先来先服务调度");
+    }
+
+    private static void printAverageResults(List<List<Integer>> results, String algorithmName) {
+        int total = 0;
+        int totalTurnaround = 0;
+        int totalWaiting = 0;
+
+        for (List<Integer> result : results) {
+            total += result.get(0);
+            totalTurnaround += result.get(1);
+            totalWaiting += result.get(2);
+        }
+
+        int numberOfRuns = results.size();
+
+        System.out.println("\n" + algorithmName + "平均结果：");
+        System.out.println("平均总用时：" + total / numberOfRuns + " 个时间单位。");
+        System.out.println("平均周转时间：" + totalTurnaround / numberOfRuns + " 个时间单位。");
+        System.out.println("平均等待时间：" + totalWaiting / numberOfRuns + " 个时间单位。");
     }
 }

@@ -22,6 +22,9 @@ class RoundRobin extends Scheduler {
         int currentTime = 0;
         while (!processQueue.isEmpty()) {
             PCB current = processQueue.poll();
+            if (current.arrivalTime > currentTime) {
+                currentTime = current.arrivalTime;
+            }
             current.state = 'R'; // R表示运行状态
             if (current.startTime == 0) {
                 current.startTime = currentTime;

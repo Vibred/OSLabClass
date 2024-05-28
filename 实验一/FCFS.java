@@ -20,6 +20,9 @@ class FCFS extends Scheduler {
         int currentTime = 0;
         while (!processQueue.isEmpty()) {
             PCB current = processQueue.poll();
+            if (current.arrivalTime > currentTime) {
+                currentTime = current.arrivalTime;
+            }
             current.state = 'R'; // R表示运行状态
             current.startTime = currentTime;
             for (int t = 0; t < current.needTime; t++) {
