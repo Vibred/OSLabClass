@@ -11,7 +11,7 @@ public class ProcessMain {
         Scanner scanner = new Scanner(System.in);
         System.out.println("请选择功能：");
         System.out.println("1. 执行processes.txt文件中的进程调度并输出结果");
-        System.out.println("2. 执行100次随机生成50个进程并比较调度算法优劣");
+        System.out.println("2. 执行随机生成多个进程并比较调度算法优劣");
         int choice = scanner.nextInt();
 
         switch (choice) {
@@ -19,7 +19,11 @@ public class ProcessMain {
                 executeProcessesFromFile();
                 break;
             case 2:
-                compareAlgorithmsWithRandomProcesses();
+                System.out.print("请输入运行次数：");
+                int numberOfRuns = scanner.nextInt();
+                System.out.print("请输入每次生成的进程数：");
+                int numberOfProcesses = scanner.nextInt();
+                compareAlgorithmsWithRandomProcesses(numberOfRuns, numberOfProcesses);
                 break;
             default:
                 System.out.println("无效选择");
@@ -65,9 +69,7 @@ public class ProcessMain {
         fcfs.schedule();
     }
 
-    private static void compareAlgorithmsWithRandomProcesses() {
-        int numberOfRuns = 100;
-        int numberOfProcesses = 50;
+    private static void compareAlgorithmsWithRandomProcesses(int numberOfRuns, int numberOfProcesses) {
         Random random = new Random();
         List<List<Integer>> rrResults = new ArrayList<>();
         List<List<Integer>> sjfResults = new ArrayList<>();
