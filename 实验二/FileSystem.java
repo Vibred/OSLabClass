@@ -35,13 +35,21 @@ class FileSystem {
     }
 
     private FileEntity parseFileEntity(String line) {
-        String[] parts = line.split(",");
-        FileEntity entity = new FileEntity(parts[0], Boolean.parseBoolean(parts[1]));
-        if (entity.isFile()) {
-            entity.setContent(parts.length > 2 ? parts[2].replace("\\,", ",") : "");
+        return parseFileEntity(line.split(","), new int[]{0});
+    }
+
+    private FileEntity parseFileEntity(String[] parts, int[] index) {
+        String name = parts[index[0]++];
+        boolean isFile = Boolean.parseBoolean(parts[index[0]++]);
+        FileEntity entity = new FileEntity(name, isFile);
+        if (isFile) {
+            entity.setContent(index[0] < parts.length ? parts[index[0]++].replace("\\,", ",") : "");
         } else {
-            for (int i = 2; i < parts.length; i++) {
-                entity.getChildren().add(parseFileEntity(parts[i]));
+            while (index[0] < parts.length && !parts[index[0]].equals("]")) {
+                entity.getChildren().add(parseFileEntity(parts, index));
+            }
+            if (index[0] < parts.length && parts[index[0]].equals("]")) {
+                index[0]++;
             }
         }
         return entity;
@@ -66,6 +74,7 @@ class FileSystem {
             for (FileEntity child : entity.getChildren()) {
                 sb.append(",").append(serializeFileEntity(child));
             }
+            sb.append(",]");
         }
         return sb.toString();
     }
