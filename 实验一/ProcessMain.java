@@ -9,24 +9,30 @@ public class ProcessMain {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("请选择功能：");
-        System.out.println("1. 执行processes.txt文件中的进程调度并输出结果");
-        System.out.println("2. 执行随机生成多个进程并比较调度算法优劣");
-        int choice = scanner.nextInt();
+        while (true) {
+            System.out.println("请选择功能：");
+            System.out.println("1. 执行processes.txt文件中的进程调度并输出结果");
+            System.out.println("2. 执行随机生成多个进程并比较调度算法优劣");
+            System.out.println("3. 退出");
+            int choice = scanner.nextInt();
 
-        switch (choice) {
-            case 1:
-                executeProcessesFromFile();
-                break;
-            case 2:
-                System.out.print("请输入运行次数：");
-                int numberOfRuns = scanner.nextInt();
-                System.out.print("请输入每次生成的进程数：");
-                int numberOfProcesses = scanner.nextInt();
-                compareAlgorithmsWithRandomProcesses(numberOfRuns, numberOfProcesses);
-                break;
-            default:
-                System.out.println("无效选择");
+            switch (choice) {
+                case 1:
+                    executeProcessesFromFile();
+                    break;
+                case 2:
+                    System.out.print("请输入运行次数：");
+                    int numberOfRuns = scanner.nextInt();
+                    System.out.print("请输入每次生成的进程数：");
+                    int numberOfProcesses = scanner.nextInt();
+                    compareAlgorithmsWithRandomProcesses(numberOfRuns, numberOfProcesses);
+                    break;
+                case 3:
+                    System.out.println("退出程序。");
+                    return;
+                default:
+                    System.out.println("无效选择，请重新选择。");
+            }
         }
     }
 
