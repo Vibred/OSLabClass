@@ -20,42 +20,41 @@ public class BankersAlgorithm {
         need = new int[numProcesses][numResources];
     }
 
-    // 生成示例输入
-    private void generateExampleInput() {
+    // 生成指定矩阵的示例输入
+    private void generateExampleInput(String matrixName) {
         Random rand = new Random();
 
-        System.out.println("示例输入:");
-
-        System.out.println("已分配矩阵 (Allocation Matrix):");
-        for (int i = 0; i < numProcesses; i++) {
+        System.out.println("示例输入(" + matrixName + "):");
+        if (matrixName.equals("已分配矩阵 (Allocation Matrix)")) {
+            for (int i = 0; i < numProcesses; i++) {
+                for (int j = 0; j < numResources; j++) {
+                    allocation[i][j] = rand.nextInt(5); // 随机生成0-4之间的数
+                    System.out.print(allocation[i][j] + " ");
+                }
+                System.out.println();
+            }
+        } else if (matrixName.equals("最大需求矩阵 (Max Matrix)")) {
+            for (int i = 0; i < numProcesses; i++) {
+                for (int j = 0; j < numResources; j++) {
+                    max[i][j] = allocation[i][j] + rand.nextInt(5); // 确保最大需求大于等于已分配
+                    System.out.print(max[i][j] + " ");
+                }
+                System.out.println();
+            }
+        } else if (matrixName.equals("可用资源向量 (Available Resources)")) {
             for (int j = 0; j < numResources; j++) {
-                allocation[i][j] = rand.nextInt(5); // 随机生成0-4之间的数
-                System.out.print(allocation[i][j] + " ");
+                available[j] = rand.nextInt(5); // 随机生成0-4之间的数
+                System.out.print(available[j] + " ");
             }
             System.out.println();
         }
-
-        System.out.println("最大需求矩阵 (Max Matrix):");
-        for (int i = 0; i < numProcesses; i++) {
-            for (int j = 0; j < numResources; j++) {
-                max[i][j] = allocation[i][j] + rand.nextInt(5); // 确保最大需求大于等于已分配
-                System.out.print(max[i][j] + " ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("可用资源向量 (Available Resources):");
-        for (int j = 0; j < numResources; j++) {
-            available[j] = rand.nextInt(5); // 随机生成0-4之间的数
-            System.out.print(available[j] + " ");
-        }
-        System.out.println();
     }
 
     // 输入矩阵
     public void inputMatrices() {
         Scanner sc = new Scanner(System.in);
 
+        generateExampleInput("已分配矩阵 (Allocation Matrix)");
         System.out.println("请输入已分配矩阵 (Allocation Matrix):");
         for (int i = 0; i < numProcesses; i++) {
             for (int j = 0; j < numResources; j++) {
@@ -63,6 +62,7 @@ public class BankersAlgorithm {
             }
         }
 
+        generateExampleInput("最大需求矩阵 (Max Matrix)");
         System.out.println("请输入最大需求矩阵 (Max Matrix):");
         for (int i = 0; i < numProcesses; i++) {
             for (int j = 0; j < numResources; j++) {
@@ -70,6 +70,7 @@ public class BankersAlgorithm {
             }
         }
 
+        generateExampleInput("可用资源向量 (Available Resources)");
         System.out.println("请输入可用资源向量 (Available Resources):");
         for (int j = 0; j < numResources; j++) {
             available[j] = sc.nextInt();
@@ -135,7 +136,6 @@ public class BankersAlgorithm {
         int numResources = sc.nextInt();
 
         BankersAlgorithm ba = new BankersAlgorithm(numProcesses, numResources);
-        ba.generateExampleInput(); // 生成示例输入
         ba.inputMatrices();
 
         System.out.println("\n输入的矩阵和向量:");
