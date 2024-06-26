@@ -35,35 +35,35 @@ public class Main extends Application {
         buttonBox.setPadding(new Insets(10));
         TextField fileNameInput = new TextField();
         TextField newFileNameInput = new TextField();
-        Button createFileBtn = new Button("Create File");
+        Button createFileBtn = new Button("创建文件");
         createFileBtn.setOnAction(e -> {
             String fileName = fileNameInput.getText();
             String currentPath = pathField.getText();
             if (!fileName.isEmpty()) {
                 if (fileSystem.createFile(currentPath, fileName)) {
-                    showAlert("Success", "File created successfully.");
+                    showAlert("成功", "文件创建成功。");
                 } else {
-                    showAlert("Error", "File name already exists or invalid path.");
+                    showAlert("错误", "文件名已存在或路径无效。");
                 }
                 updateFileList(currentPath);
                 fileNameInput.clear();
             }
         });
-        Button createFolderBtn = new Button("Create Folder");
+        Button createFolderBtn = new Button("创建文件夹");
         createFolderBtn.setOnAction(e -> {
             String folderName = fileNameInput.getText();
             String currentPath = pathField.getText();
             if (!folderName.isEmpty()) {
                 if (fileSystem.createFolder(currentPath, folderName)) {
-                    showAlert("Success", "Folder created successfully.");
+                    showAlert("成功", "文件夹创建成功。");
                 } else {
-                    showAlert("Error", "Folder name already exists or invalid path.");
+                    showAlert("错误", "文件夹名已存在或路径无效。");
                 }
                 updateFileList(currentPath);
                 fileNameInput.clear();
             }
         });
-        Button renameBtn = new Button("Rename");
+        Button renameBtn = new Button("重命名");
         renameBtn.setOnAction(e -> {
             String selectedItem = fileList.getSelectionModel().getSelectedItem();
             String newName = newFileNameInput.getText();
@@ -71,15 +71,15 @@ public class Main extends Application {
             if (selectedItem != null && !newName.isEmpty()) {
                 String name = selectedItem.split(" ")[0];
                 if (fileSystem.renameFileOrFolder(currentPath, name, newName)) {
-                    showAlert("Success", "File/Folder renamed successfully.");
+                    showAlert("成功", "文件/文件夹重命名成功。");
                 } else {
-                    showAlert("Error", "New name already exists or invalid path.");
+                    showAlert("错误", "新名称已存在或路径无效。");
                 }
                 updateFileList(currentPath);
                 newFileNameInput.clear();
             }
         });
-        Button backButton = new Button("Back");
+        Button backButton = new Button("返回");
         backButton.setOnAction(e -> {
             String currentPath = pathField.getText();
             if (!"/".equals(currentPath)) {
@@ -91,11 +91,11 @@ public class Main extends Application {
                 updateFileList(parentPath);
             }
         });
-        buttonBox.getChildren().addAll(new Label("File/Folder Name:"), fileNameInput, createFileBtn, createFolderBtn, new Label("New Name:"), newFileNameInput, renameBtn, backButton);
+        buttonBox.getChildren().addAll(new Label("文件/文件夹名:"), fileNameInput, createFileBtn, createFolderBtn, new Label("新名称:"), newFileNameInput, renameBtn, backButton);
 
         VBox rightBox = new VBox(10);
         rightBox.setPadding(new Insets(10));
-        Button deleteBtn = new Button("Delete");
+        Button deleteBtn = new Button("删除");
         deleteBtn.setOnAction(e -> {
             String selectedItem = fileList.getSelectionModel().getSelectedItem();
             String currentPath = pathField.getText();
@@ -105,7 +105,7 @@ public class Main extends Application {
                 updateFileList(currentPath);
             }
         });
-        Button openBtn = new Button("Open");
+        Button openBtn = new Button("打开");
         openBtn.setOnAction(e -> {
             String selectedItem = fileList.getSelectionModel().getSelectedItem();
             String currentPath = pathField.getText();
@@ -122,7 +122,7 @@ public class Main extends Application {
                 }
             }
         });
-        Button saveContentBtn = new Button("Save Content");
+        Button saveContentBtn = new Button("保存内容");
         saveContentBtn.setOnAction(e -> {
             String selectedItem = fileList.getSelectionModel().getSelectedItem();
             String currentPath = pathField.getText();
@@ -132,18 +132,18 @@ public class Main extends Application {
                 if (entity != null && entity.isFile()) {
                     entity.setContent(fileContentArea.getText());
                     fileSystem.writeDisk();
-                    showAlert("Success", "Content saved successfully.");
+                    showAlert("成功", "内容保存成功。");
                 }
             }
         });
-        rightBox.getChildren().addAll(new Label("Select a file or folder:"), fileList, openBtn, deleteBtn, fileContentArea, saveContentBtn);
+        rightBox.getChildren().addAll(new Label("选择一个文件或文件夹:"), fileList, openBtn, deleteBtn, fileContentArea, saveContentBtn);
 
         root.setTop(pathField);
         root.setCenter(buttonBox);
         root.setRight(rightBox);
 
         primaryStage.setScene(new Scene(root, 600, 400));
-        primaryStage.setTitle("File System");
+        primaryStage.setTitle("文件系统");
         primaryStage.show();
     }
 
@@ -152,7 +152,7 @@ public class Main extends Application {
         List<FileEntity> files = fileSystem.getFiles(path);
         if (files != null) {
             for (FileEntity file : files) {
-                fileList.getItems().add(file.getName() + (file.isFile() ? " (File)" : " (Folder)"));
+                fileList.getItems().add(file.getName() + (file.isFile() ? " (文件)" : " (文件夹)"));
             }
         }
     }
